@@ -2,6 +2,7 @@ import React, { Component } from 'react'
 import Table from './Table'
 import Form from './Form'
 import FetchDemo from './FetchDemo'
+import axios from 'axios'
 
 class App extends Component {
   state = {
@@ -23,6 +24,19 @@ class App extends Component {
     this.setState({ characters: [...this.state.characters, character] })
   };
 
+  componentDidMount() {
+    const url = 'http://localhost:5000/users'
+    axios.get(url)
+     .then(res => {
+       const characters = res.data.users_list;
+       this.setState({ characters });
+     })
+     .catch(function (error) {
+       //Not handling the error. Just logging into the console.
+       console.log(error);
+     });
+ }
+
   render() {
     const { characters } = this.state;
     
@@ -30,7 +44,7 @@ class App extends Component {
       <div className="container">
         <Table characterData={characters} removeCharacter={this.removeCharacter} />
         <Form handleSubmit = {this.handleSubmit}/>
-        <FetchDemo subreddit='r/calpoly'/>
+        {/* <FetchDemo subreddit='r/calpoly'/> */}
       </div>
     );
   }
